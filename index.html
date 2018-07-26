@@ -5,7 +5,26 @@
 		<script src='map_locations.js'></script>
 		<style>
 		#container {
-			position: relative;
+		  overflow: hidden;
+		  width: 100vw; 
+		  height: 100vw; /* height:width ratio = 9/16 = .5625  */
+		  max-height: 100vh;
+		  max-width: 100vh; /* 16/9 = 1.778 */
+		  position: relative;
+		  padding: 0;
+		  margin: 0;
+		  left: 0; top: 0;
+		  font-family: 'Roboto', sans-serif;
+		}
+		#map {
+		  display: block;
+		  width: 100%;
+		  height: 100%;
+		  position: absolute;
+		  top: 0;
+		  bottom: 0;
+		  left: 0;
+		  right: 0;
 		}
 		.waypoint {
 			position: absolute;
@@ -16,6 +35,7 @@
 			font-size: 0;
 			border-radius: 50%;
 			transform: translate(-5px,-5px);
+    		cursor: default;
 		}
 		.waypoint:hover {
 			width: auto;
@@ -26,16 +46,31 @@
 			white-space: nowrap;
 			padding: 0px 2px 0px 2px;
 		}
+		#footer {
+			position: absolute;
+			bottom: 0;
+			left: 0;
+			right: 0;
+		}
 		</style>
 	</head>
-	<body>
+	<body style="margin:0">
 		<div id='container'>
-			<img src='BotW-Map.png'/>
+			<img id='map' src='BotW-Map.png'/>
+			<footer style='bottom:0; right:0; left:0; text-align: center; position: absolute; color:grey'>
+	            <a href="https://mrcheeze.github.io/">https://mrcheeze.github.io/</a>
+	            <span id='coord'>(Coordinate)</span>
+	        </footer>
 		</div>
-		<div><a href="https://mrcheeze.github.io/">https://mrcheeze.github.io/</a></div>
 		<script>
 			for (var i=0; i<locations.length; i++) {
-				$('#container').append("<div class='waypoint' style='left: " + (3000 + locations[i].x/2) + "; top: " + (2500 + locations[i].y/2) + "'>"+locations[i].display_name+"</div>");
+				$('#container').append("<div class='waypoint' style='left: " + ((3000 + locations[i].x/2) / 60) + "%; top: " + ((2500 + locations[i].y/2)/ 50) + "%'>"+locations[i].display_name+"</div>");
+			}
+			var container = document.getElementById('container'); 
+			container.onmousemove = function(e) { 
+			    var x = Math.round((((e.pageX - e.currentTarget.offsetLeft) / e.currentTarget.offsetWidth) - 0.5) * 12000); 
+			    var y = Math.round((((e.pageY - e.currentTarget.offsetTop) / e.currentTarget.offsetHeight) - 0.5) * 10000); 
+			    $('#coord').text("(" + x + ", " + y + ")");
 			}
 		</script>
 	</body>
